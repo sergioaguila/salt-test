@@ -1,0 +1,51 @@
+#!/bin/bash
+
+hostname "flask-client"
+echo "flask-client" > /etc/hostname
+wget -O bootstrap-salt.sh https://bootstrap.saltstack.com
+sh bootstrap-salt.sh
+
+SALT_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEA6HuCGNMiK/kZ4O8rxe722KWVtztMxIWqN+PIZjnOHxcGZaQL
+NfKWdRtb2fju307LuxONIeKocPZgw+OSZ2wlMup36C3nhcQ4MSVVNn/ADbvWoiWv
+z5pLcVNbEYra+KOBJvV+RV+bo3z4nqSv2M3C3QrIIuS/ih5Eov/Z0jzXcXX+Mdzy
+WRuU09/asxErqR5p8DQ6oSXYAGxnIkmNw03KIentXq9qsY7QSNrDL41ErcfAyCp3
+3YgOxPD0z8KuRIl4w09HRty4Fdh4v1fCU8t4+niGIu38aPjBLZNW10Hn9/dHGIJd
+zIzIKQbvlbYuBY/SsW6DVsIvKPtQIcds7w+feQIDAQABAoIBAQDVklEL2Tp1Rxw9
+Bbsi1Mq0cDm/4Jw/lcOwIHPDZasz6IUZ7r/VyYvq/T0+W2+mec6zh9yJmp2/WLfA
+fVnL5Q+vXLLW+wTMYFx22aMUs/uNIlilERYYE9jmvPrWfMd4z0wgrDpaJODoKjCE
+HSrmcvBm/Darx5Umn3PSglRqzTXmpgyo0GFfb7BtmdsnzSLmsgjw4Jtb6dSU0kIH
+rABbS+zjGK01Af9KduNiidaGA3cdasUMsRJ924sPFluMeEMuza5j/7FEc+7X+YbT
+o7QGHWJ5lQSJyq1ku6jY8RclXJgI47sUtoVAgI94gKr+5jAbmIbqQWHMzGYWWS9a
+4wdiWaRhAoGBAPMjXNfQZRZjsaZqoKturhny7Mxme4nYztwwpFnwa2+OpRJaq7H5
+aDmQMGFuA0nS9I53vOycdZKCYMiSJ70hGrhGr6MpoWAJL/g4JxVOE9jSN0zY2k6s
+c+Rc4jqA4mzWNdXCIVFY6nO8ISy8/ABE5UbwrKaURhJcz4HJy+Os+KPNAoGBAPTH
+1/ezrgQO5oUH/EE/UxowNlPoGh/DDOjHY10A94dAbGyKMAs5eO0rF42uNYmcJmYm
+L/XiMy4NpPiiT+CebJy+yz6xeIaTcnr6enwU8TRhVjHJB6pwdkedt+Nblk0cE2w3
+ToKAc1yPL4LYp3lN5EUSXsWcVZxJ0qQ0lAXNypZdAoGAErhoT52WCvFGHmAbWte8
+w/a2UM6bOHPfCYkdPmeKfh5ni1A75AomAjid4QKNckOx3L5PZ5BsZQlw1kCamq9P
+1Vxr7Y4pBLHwZZY9PCC02n7lDx+rP1971Ntp98Mwq9yabIjz88V618pma4FpjcPA
+O4QQZwsHkiZfO8kDz9XjlwkCgYAYTrAXnPQu2vvxQfW+1Pb/psH+WxIdDVV+2C35
+0lrCR5d8v8w9kRt9EcZo/1+5ppP5mNkyZaAHdrtnJVchSxomBpxQQXdihcnchHsd
+T0cUmIXis7/bIQfd3L+iCDpItf0HxgY511+dVWq2Z6VZ2m5MnaJjpT6rInmUbNQ2
+L1Vq0QKBgGp2JogcuxuGaBARdRbSfoKqccwi7n6/eOAYNfN8VJ0qYp1DrkkDsn/U
+z8m2HdXU+66AOeiwhoi79oiTjf635SlL0kN8uJux8e/j2wgL9Q47rxbPsLJj1orI
+FU8xnMOAR51n2S6kHJRyEfbD5QAclslJUGWY8FOkErDVIEDzfH90
+-----END RSA PRIVATE KEY-----"
+
+SALT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6HuCGNMiK/kZ4O8rxe72
+2KWVtztMxIWqN+PIZjnOHxcGZaQLNfKWdRtb2fju307LuxONIeKocPZgw+OSZ2wl
+Mup36C3nhcQ4MSVVNn/ADbvWoiWvz5pLcVNbEYra+KOBJvV+RV+bo3z4nqSv2M3C
+3QrIIuS/ih5Eov/Z0jzXcXX+MdzyWRuU09/asxErqR5p8DQ6oSXYAGxnIkmNw03K
+IentXq9qsY7QSNrDL41ErcfAyCp33YgOxPD0z8KuRIl4w09HRty4Fdh4v1fCU8t4
++niGIu38aPjBLZNW10Hn9/dHGIJdzIzIKQbvlbYuBY/SsW6DVsIvKPtQIcds7w+f
+eQIDAQAB
+-----END PUBLIC KEY----"
+
+
+echo "${SALT_PRIVATE_KEY}" > /etc/salt/pki/minion/minion.pem 
+echo "${SALT_PUBLIC_KEY}" > /etc/salt/pki/minion/minion.pub
+chmod 400 /etc/salt/pki/minion/minion.pem
+echo "master: salt-master.sergioaguila.com" >/etc/salt/minion.d/99-master-address.conf 
+service salt-minion restart
