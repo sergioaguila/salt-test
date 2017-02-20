@@ -7,12 +7,16 @@ git:
 flask:
   pip.installed:
     - name: Flask
+    
+gunicorn:
+  pip.installed:
+    - name: gunicorn
+
 
 clone flask app:
-  cmd:
-    - run
-    - unless: test -d /opt/chefk-test
-    - name: >
-              git clone https://github.com/sergioaguila/salt-test.git /opt/
-              export FLASK_APP='/opt/salt-test/app/hello.py'
-              flask run --port=80 --host='0.0.0.0'
+  cmd.run:
+    - name: 'git clone https://github.com/sergioaguila/salt-test.git /opt/salt-test'
+
+export app:
+  cmd.run:
+    - name: cd /opt/salt-test/app; gunicorn -b 0.0.0.0:80  -w 1 -D hello:Flask

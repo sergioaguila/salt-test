@@ -1,3 +1,3 @@
 base:
   'flask*':
-    - flask-package
+    - proxy-package
